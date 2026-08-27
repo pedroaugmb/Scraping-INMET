@@ -8,14 +8,19 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# options = Options()
-# options.add_argument("--headless=new") #não precisar abrir o navegador na tela
+options = Options()
+options.add_argument("--headless=new")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--window-size=1920,1080")
+options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+ #não precisar abrir o navegador na tela
 url = 'https://portal.inmet.gov.br/dadoshistoricos'
-navegador = webdriver.Chrome()
+navegador = webdriver.Chrome(options = options)
 navegador.get(url) #acessando o site
 
 #publicações
-publicacoes = WebDriverWait(navegador, 10).until(
+publicacoes = WebDriverWait(navegador, 20).until(
     EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='Publicações']")))
 
 publicacoes.click()
