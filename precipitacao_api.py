@@ -20,7 +20,7 @@ def baixar_imagem(produto, metodo, ano, mes, pasta="data/dados_inmet_clima_api")
     png = base64.b64decode(dados_base64)
 
     pasta = Path(pasta)
-    pasta.mkdir(exist_ok=True)
+    pasta.mkdir(parents=True, exist_ok=True)
 
     caminho = pasta / f"{produto}_{metodo}_{ano}_{mes:02d}.png"
     caminho.write_bytes(png)
