@@ -5,7 +5,7 @@ from pathlib import Path
 
 API = "https://apiclima.inmet.gov.br"
 
-def baixar_imagem(produto, metodo, ano, mes, pasta="dados_inmet_clima_api"):
+def baixar_imagem(produto, metodo, ano, mes, pasta="data/dados_inmet_clima_api"):
     url = f"{API}/{produto}/{ano}/{metodo}/{mes:02d}"
 
     resposta = requests.get(url, timeout=30)

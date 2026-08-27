@@ -6,7 +6,7 @@ link = ("https://portal.inmet.gov.br/dadoshistoricos") #texto com o link do site
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"}
 #por onde estou fazendo a requisição, para não ser bloqueado pelo site
 
-pasta = Path("dados_inmet") #criando uma pasta para armazenar os dados raspados
+pasta = Path("data") / "dados_inmet" #criando uma pasta para armazenar os dados raspados
 pasta.mkdir(exist_ok=True) #comando para criar a pasta, caso ela não exista
 
 requisicao = requests.get(link, headers=headers) #requisitando o site com o link e o cabeçalho
