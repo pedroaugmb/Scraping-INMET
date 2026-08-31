@@ -1,6 +1,7 @@
 import re
 import os
 import requests
+from datetime import date
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -17,47 +18,55 @@ options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537
  #não precisar abrir o navegador na tela
 url = 'https://portal.inmet.gov.br/dadoshistoricos'
 navegador = webdriver.Chrome(options = options)
-navegador.get(url) #acessando o site
 
-#publicações
-publicacoes = WebDriverWait(navegador, 20).until(
-    EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='Publicações']")))
+try:
+    navegador.get(url) #acessando o site
 
-publicacoes.click()
+    #publicações
+    publicacoes = WebDriverWait(navegador, 20).until(
+        EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='Publicações']")))
 
-#boletins
-navegador.find_element(By.XPATH, "//a[normalize-space()='Boletins']").click()
-sleep(1)
+    publicacoes.click()
 
-#prognóstico climático
-navegador.find_element(By.CSS_SELECTOR, 'a[href="/boletinsprog"]').click()
+    #boletins
+    navegador.find_element(By.XPATH, "//a[normalize-space()='Boletins']").click()
+    sleep(1)
 
-#aba do ano de 2025
-elementos = navegador.find_elements(
-    By.XPATH,
-    "//div[@id='d2025']//a[contains(@onclick, 'pdfcall')]"
-)
+    #prognóstico climático
+    navegador.find_element(By.CSS_SELECTOR, 'a[href="/boletinsprog"]').click()
 
-pasta = os.path.join("data", "source_raw", "downloads")
-os.makedirs(pasta, exist_ok=True)
+    #aba do ano corrente
+    ano_atual = date.today().year
+    elementos = navegador.find_elements(
+        By.XPATH,
+        f"//div[@id='d{ano_atual}']//a[contains(@onclick, 'pdfcall')]"
+    )
 
-print(f"PDFs encontrados: {len(elementos)}")
+    pasta = os.path.join("data", "source_raw", "downloads")
+    os.makedirs(pasta, exist_ok=True)
 
-for elemento in elementos:
-    onclick = elemento.get_attribute("onclick")
+    print(f"PDFs encontrados: {len(elementos)}")
 
-    resultado = re.search(r"pdfcall\('([^']+)'", onclick)
+    for elemento in elementos:
+        onclick = elemento.get_attribute("onclick")
 
-    if resultado:
-        url_pdf = resultado.group(1)
-        nome = url_pdf.split("/")[-1]
+        resultado = re.search(r"pdfcall\('([^']+)'", onclick)
 
-        resposta = requests.get(url_pdf, timeout=30)
-        resposta.raise_for_status()
+        if resultado:
+            url_pdf = resultado.group(1)
+            nome = url_pdf.split("/")[-1]
+            caminho = os.path.join(pasta, nome)
 
-        caminho = os.path.join(pasta, nome)
+            if os.path.exists(caminho):
+                print(f"O arquivo {nome} já existe. Pulando...")
+                continue
 
-        with open(caminho, "wb") as arquivo:
-            arquivo.write(resposta.content)
+            resposta = requests.get(url_pdf, timeout=30)
+            resposta.raise_for_status()
 
-        print(f"Baixado: {caminho}")
+            with open(caminho, "wb") as arquivo:
+                arquivo.write(resposta.content)
+
+            print(f"Baixado: {caminho}")
+finally:
+    navegador.quit()
