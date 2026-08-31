@@ -38,7 +38,7 @@ elementos = navegador.find_elements(
     "//div[@id='d2025']//a[contains(@onclick, 'pdfcall')]"
 )
 
-pasta = os.path.join("data", "downloads")
+pasta = os.path.join("data", "source_raw", "downloads")
 os.makedirs(pasta, exist_ok=True)
 
 print(f"PDFs encontrados: {len(elementos)}")
