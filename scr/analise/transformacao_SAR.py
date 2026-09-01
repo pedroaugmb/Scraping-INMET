@@ -27,8 +27,9 @@ def transformar_dados(caminho_source_raw: Path) -> pd.DataFrame:
 
 def gerar_grafico_dispersao(df: pd.DataFrame, caminho_saida: Path) -> None:
     """Gera e salva o gráfico de dispersão."""
+    caminho_saida = Path(caminho_saida)
     caminho_saida.parent.mkdir(parents=True, exist_ok=True)
-
+    #monta o gráfico com os dados brutos coletados para validar relação direta
     plt.figure(figsize=(8, 5))
     plt.scatter(df["Cota (m)"], df["Volume (hm³)"], alpha=0.7)
     plt.xlabel("Cota (m)")
@@ -54,5 +55,6 @@ def treinar_modelo_regressao(df: pd.DataFrame):
 
 def salvar_raw(df: pd.DataFrame, caminho_destino: Path) -> None:
     """Salva o DataFrame limpo em disco."""
+    caminho_destino = Path(caminho_destino)
     caminho_destino.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(caminho_destino, index=False)
