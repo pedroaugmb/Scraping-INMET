@@ -1,9 +1,9 @@
 from airflow.sdk import dag, task
 import pendulum
 
-from src.scraping.extracao_SAR import extrair_dados, salvar_source_raw
-from src.analise.transformacao_SAR import (transformar_dados, salvar_raw)
-from src.modeling.regressao_reservatorios import gerar_modelo
+from scr.scraping.extracao_SAR import extrair_dados, salvar_source_raw
+from scr.analise.transformacao_SAR import (transformar_dados, salvar_raw)
+from scr.analise.analise_SAR import gerar_modelo
 
 
 @dag(
