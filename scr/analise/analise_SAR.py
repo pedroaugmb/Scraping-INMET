@@ -13,7 +13,7 @@ def gerar_grafico_regressao(X_teste, y_teste, previsoes, caminho_saida: Path) ->
     """Plota os dados de teste e a reta ajustada pelo modelo."""
     caminho_saida = Path(caminho_saida)
     caminho_saida.parent.mkdir(parents=True, exist_ok=True)
-    #gera gráfico com os dados de treino e reta gerada pelo modelo sobrepostos  
+    #gera gráfico o gráfio de treino, com os dados de treino e reta gerada pelo modelo sobrepostos  
     x = X_teste["Cota (m)"]
     ordem = x.values.argsort()
 
@@ -36,7 +36,7 @@ def gerar_modelo(df, caminho_grafico: Path = None):
     r2 = r2_score(y_teste, previsoes)
     mae = mean_absolute_error(y_teste, previsoes)
     rmse = mean_squared_error(y_teste, previsoes) ** 0.5
-    #gera o gráfico do teste, com o resto dos dados e a reta gerada pelo modelo com eles 
+    #gera o gráfico de teste, com o resto dos dados e a reta gerada pelo modelo com eles 
     if caminho_grafico is not None:
         gerar_grafico_regressao(X_teste, y_teste, previsoes, caminho_grafico)
 
