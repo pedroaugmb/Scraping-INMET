@@ -12,6 +12,7 @@ def extrair_dados(link: str) -> pd.DataFrame:
     requisicao.raise_for_status()
     site = BeautifulSoup(requisicao.text, "html.parser") #"abrindo" o site com BS e transformando em um objeto manipulável
 
+    #dados disponíveis na tabela do site:
     tabela = site.find("table")
     linhas = tabela.find_all("tr")
     dados = []
@@ -23,6 +24,7 @@ def extrair_dados(link: str) -> pd.DataFrame:
             for coluna in colunas
         ])
 
+    #pegando os dados e transformando em dataframe
     df = pd.DataFrame(dados[1:], columns=dados[0])
     print(df.head())
     print(df.info())
